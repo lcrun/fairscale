@@ -1853,7 +1853,7 @@ class FullyShardedDataParallel(nn.Module):
                             p.data = p.data.to(self.compute_device)
 
             for p in self.params:
-                if not p._is_sharded:  # e.g., when world_size == 1
+                if not hasattr(p, "_is_shared") or not p._is_sharded:  # e.g., when world_size == 1
                     update_p_data()
                 else:
                     # Skip if already built. Only shared param can be rebuilt multiple times.
